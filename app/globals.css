@@ -1,26 +1,70 @@
-@import "tailwindcss";
+/* app/globals.css */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   ROOT VARIABLES — Your design system tokens
+   Change these to change the entire site feel
+   ============================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg: #080808;
+  --color-text: #f0ede6;
+  --color-accent: #c9a96e;
+  --color-muted: #4a4a4a;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'DM Sans', sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ============================================
+   BASE RESET — Consistent across all browsers
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll, not CSS */
+  background-color: var(--color-bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none; /* We'll build a custom cursor */
+}
+
+/* ============================================
+   TYPOGRAPHY SCALE
+   ============================================ */
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* ============================================
+   SELECTION COLOR — Small luxury touch
+   ============================================ */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* ============================================
+   SCROLLBAR — Hidden for cleaner look
+   ============================================ */
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
