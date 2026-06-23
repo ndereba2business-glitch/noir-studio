@@ -68,3 +68,26 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+/* ============================================
+   SCROLL INDICATOR ANIMATION
+   ============================================ */
+@keyframes scrollLine {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.animate-scroll-line {
+  animation: scrollLine 1.8s ease-in-out infinite;
+}
+
+/* ============================================
+   WORD ANIMATION BASE
+   ============================================ */
+.word-wrapper {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.word {
+  display: inline-block;
+}

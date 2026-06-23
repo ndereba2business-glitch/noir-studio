@@ -3,9 +3,10 @@
 import type { Metadata } from 'next'
 import { DM_Sans, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
+import SmoothScroll from '@/components/layout/SmoothScroll'
+import CustomCursor from '@/components/ui/CustomCursor'
+import Navbar from '@/components/layout/Navbar'
 
-// ── Font Configuration ───────────────────────────────────────────
-// Next.js loads these fonts from Google with zero layout shift
 const dmSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-dm-sans',
@@ -19,32 +20,24 @@ const cormorant = Cormorant_Garamond({
   display: 'swap',
 })
 
-// ── SEO Metadata ─────────────────────────────────────────────────
-// This appears in Google search results and browser tabs
 export const metadata: Metadata = {
-  title: 'Noir Studio — Creative Digital Agency',
+  title: 'Noir Studio — Creative Digital Studio',
   description: 'Cinematic web experiences for ambitious brands.',
-  keywords: ['web design', 'creative agency', 'UI/UX', 'freelance developer'],
-  openGraph: {
-    title: 'Noir Studio',
-    description: 'Cinematic web experiences for ambitious brands.',
-    type: 'website',
-  },
 }
 
-// ── Root Layout ──────────────────────────────────────────────────
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang="en"
-      className={`${dmSans.variable} ${cormorant.variable}`}
-    >
+    <html lang="en" className={`${dmSans.variable} ${cormorant.variable}`}>
       <body className="bg-noir-bg text-noir-text font-body antialiased">
-        {children}
+        <SmoothScroll>
+          <CustomCursor />
+          <Navbar />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   )
