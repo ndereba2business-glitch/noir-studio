@@ -1,10 +1,4 @@
 // components/layout/SmoothScroll.tsx
-// ─────────────────────────────────────────────────────
-// Wraps the entire site with Lenis smooth scroll.
-// Every page automatically gets buttery smooth scrolling.
-// This is what separates amateur sites from agency sites.
-// ─────────────────────────────────────────────────────
-
 'use client'
 
 import { useEffect } from 'react'
@@ -20,29 +14,24 @@ export default function SmoothScroll({
   children: React.ReactNode
 }) {
   useEffect(() => {
-    // ── Create Lenis instance ──────────────────────────
     const lenis = new Lenis({
-      duration: 1.4,        // How long the scroll momentum lasts
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      smoothWheel: true,    // Smooth mouse wheel scrolling
+      duration: 1.4,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical' as const,
+      smoothWheel: true,
     })
 
-    // ── Connect Lenis to GSAP's ticker ────────────────
-    // This makes GSAP ScrollTrigger and Lenis work together
-    // Without this, scroll animations would feel janky
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000)
-    })
+    function raf(time: number) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
 
-    gsap.ticker.lagSmoothing(0)
+    requestAnimationFrame(raf)
 
-    // ── Cleanup on unmount ────────────────────────────
+    lenis.on('scroll', ScrollTrigger.update)
+
     return () => {
       lenis.destroy()
-      gsap.ticker.remove((time) => {
-        lenis.raf(time * 1000)
-      })
     }
   }, [])
 

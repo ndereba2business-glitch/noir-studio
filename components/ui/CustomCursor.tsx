@@ -1,10 +1,10 @@
 // components/ui/CustomCursor.tsx
-// ─────────────────────────────────────────────────────
-// Replaces the default browser cursor with a custom one.
-// Two layers: a small dot that follows instantly,
-// and a larger circle that follows with a slight delay.
-// The lag between them creates a liquid, premium feel.
-// ─────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// Two-layer cursor system:
+// Layer 1 (dot)   → Follows mouse instantly. Snappy and precise.
+// Layer 2 (ring)  → Follows with a slight delay. Creates depth.
+// On hover over links/buttons → ring expands. Luxury interaction.
+// ─────────────────────────────────────────────────────────────────
 
 'use client'
 
@@ -13,32 +13,32 @@ import { gsap } from 'gsap'
 
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null)
-  const circleRef = useRef<HTMLDivElement>(null)
+  const ringRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const dot = dotRef.current
-    const circle = circleRef.current
-    if (!dot || !circle) return
+    const ring = ringRef.current
+    if (!dot || !ring) return
 
-    // ── Track mouse position ───────────────────────────
-    const moveCursor = (e: MouseEvent) => {
-      const { clientX: x, clientY: y } = e
+    // ── Track mouse position ───────────────────────────────────
+    const onMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e
 
-      // Dot follows cursor instantly — no delay
-      gsap.set(dot, { x, y })
+      // Dot follows instantly
+      gsap.set(dot, { x: clientX, y: clientY })
 
-      // Circle follows with smooth lag — creates luxury feel
-      gsap.to(circle, {
-        x,
-        y,
-        duration: 0.6,
+      // Ring follows with smooth lag — this creates the premium feel
+      gsap.to(ring, {
+        x: clientX,
+        y: clientY,
+        duration: 0.15,
         ease: 'power2.out',
       })
     }
 
-    // ── Grow cursor on hoverable elements ─────────────
-    const growCursor = () => {
-      gsap.to(circle, {
+    // ── Hover effect on interactive elements ──────────────────
+    const onMouseEnter = () => {
+      gsap.to(ring, {
         scale: 2.5,
         opacity: 0.5,
         duration: 0.3,
@@ -50,9 +50,8 @@ export default function CustomCursor() {
       })
     }
 
-    // ── Shrink cursor back to normal ──────────────────
-    const shrinkCursor = () => {
-      gsap.to(circle, {
+    const onMouseLeave = () => {
+      gsap.to(ring, {
         scale: 1,
         opacity: 1,
         duration: 0.3,
@@ -64,43 +63,51 @@ export default function CustomCursor() {
       })
     }
 
-    // ── Add event listeners ───────────────────────────
-    window.addEventListener('mousemove', moveCursor)
+    // ── Hide cursor when leaving window ───────────────────────
+    const onMouseLeaveWindow = () => {
+      gsap.to([dot, ring], { opacity: 0, duration: 0.3 })
+    }
 
-    // Find all clickable elements and add hover effects
-    const hoverElements = document.querySelectorAll(
-      'a, button, [data-cursor-hover]'
-    )
-    hoverElements.forEach((el) => {
-      el.addEventListener('mouseenter', growCursor)
-      el.addEventListener('mouseleave', shrinkCursor)
+    const onMouseEnterWindow = () => {
+      gsap.to([dot, ring], { opacity: 1, duration: 0.3 })
+    }
+
+    // ── Attach all event listeners ────────────────────────────
+    window.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseleave', onMouseLeaveWindow)
+    document.addEventListener('mouseenter', onMouseEnterWindow)
+
+    // Apply hover effect to all links and buttons
+    const interactives = document.querySelectorAll('a, button')
+    interactives.forEach((el) => {
+      el.addEventListener('mouseenter', onMouseEnter)
+      el.addEventListener('mouseleave', onMouseLeave)
     })
 
+    // ── Cleanup ───────────────────────────────────────────────
     return () => {
-      window.removeEventListener('mousemove', moveCursor)
-      hoverElements.forEach((el) => {
-        el.removeEventListener('mouseenter', growCursor)
-        el.removeEventListener('mouseleave', shrinkCursor)
+      window.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseleave', onMouseLeaveWindow)
+      document.removeEventListener('mouseenter', onMouseEnterWindow)
+      interactives.forEach((el) => {
+        el.removeEventListener('mouseenter', onMouseEnter)
+        el.removeEventListener('mouseleave', onMouseLeave)
       })
     }
   }, [])
 
   return (
     <>
-      {/* Small instant dot */}
+      {/* Inner dot — snappy, precise */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-noir-accent rounded-full 
-                   pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2
-                   mix-blend-difference"
+        className="fixed top-0 left-0 w-2 h-2 bg-noir-accent rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
       />
 
-      {/* Larger lagging circle */}
+      {/* Outer ring — lagged, expands on hover */}
       <div
-        ref={circleRef}
-        className="fixed top-0 left-0 w-8 h-8 border border-noir-accent 
-                   rounded-full pointer-events-none z-[9998] 
-                   -translate-x-1/2 -translate-y-1/2"
+        ref={ringRef}
+        className="fixed top-0 left-0 w-8 h-8 border border-noir-accent rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2"
       />
     </>
   )

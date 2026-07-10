@@ -1,13 +1,17 @@
-// app/page.tsx
-
-import Hero from '@/components/sections/Hero'
-import WorkPreview from '@/components/sections/WorkPreview'
+﻿import Hero from '@/components/sections/Hero'
+import Marquee from '@/components/sections/Marquee'
+import Work from '@/components/sections/Work'
+import About from '@/components/sections/About'
+import Contact from '@/components/sections/Contact'
 
 export default function Home() {
   return (
-    <main>
+    <main style={{ background: '#080808' }}>
       <Hero />
-      <WorkPreview />
+      <Marquee />
+      <Work />
+      <About />
+      <Contact />
     </main>
   )
 }

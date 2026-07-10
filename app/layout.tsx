@@ -1,5 +1,4 @@
 // app/layout.tsx
-
 import type { Metadata } from 'next'
 import { DM_Sans, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
@@ -21,7 +20,7 @@ const cormorant = Cormorant_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: 'Noir Studio — Creative Digital Studio',
+  title: 'Noir Studio — Creative Digital Agency',
   description: 'Cinematic web experiences for ambitious brands.',
 }
 
@@ -31,8 +30,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${cormorant.variable}`}>
-      <body className="bg-noir-bg text-noir-text font-body antialiased">
+    <html
+      lang="en"
+      className={`${dmSans.variable} ${cormorant.variable}`}
+    >
+      <body className="bg-noir-bg text-noir-text antialiased">
         <SmoothScroll>
           <CustomCursor />
           <Navbar />

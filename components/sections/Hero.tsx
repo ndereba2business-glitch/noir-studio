@@ -1,16 +1,4 @@
-// components/sections/Hero.tsx
-// ─────────────────────────────────────────────────────
-// The first thing every visitor sees.
-// Built to create a strong emotional first impression.
-//
-// What it does:
-// 1. Fades in on page load with staggered text reveals
-// 2. Headline splits into words and animates in from below
-// 3. Scroll-triggered parallax on background text
-// 4. A scroll indicator that pulses gently
-// ─────────────────────────────────────────────────────
-
-'use client'
+﻿'use client'
 
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
@@ -18,190 +6,175 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const WORDS = ['Crafting', 'Digital', 'Experiences']
+
+const GRAIN = {
+  backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E\")",
+  backgroundSize: '200px 200px',
+}
+
 export default function Hero() {
-  const heroRef = useRef<HTMLElement>(null)
-  const headlineRef = useRef<HTMLHeadingElement>(null)
-  const sublineRef = useRef<HTMLParagraphElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const bgTextRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const subRef = useRef<HTMLParagraphElement>(null)
+  const lineRef = useRef<HTMLDivElement>(null)
+  const labelRef = useRef<HTMLSpanElement>(null)
+  const bgRef = useRef<HTMLDivElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
 
-      // ── 1. Split headline into individual words ──────
-      // Each word gets wrapped in a span so we can
-      // animate them in one by one (stagger effect)
-      if (headlineRef.current) {
-        const words = headlineRef.current.innerText.split(' ')
-        headlineRef.current.innerHTML = words
-          .map(
-            (word) =>
-              `<span class="word-wrapper" style="overflow:hidden; display:inline-block;">
-                <span class="word" style="display:inline-block; transform:translateY(110%)">
-                  ${word}
-                </span>
-              </span>`
-          )
-          .join(' ')
-      }
-
-      // ── 2. Page load animation timeline ─────────────
-      // Everything animates in sequence on first load
-      const tl = gsap.timeline({ delay: 0.3 })
-
-      // Words slide up into view one by one
-      tl.to('.word', {
-        y: 0,
-        duration: 1.2,
-        stagger: 0.08,
-        ease: 'power4.out',
+      gsap.set([lineRef.current, labelRef.current, subRef.current, bottomRef.current], {
+        opacity: 0,
       })
 
-      // Subline fades in after headline
-      .fromTo(
-        sublineRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-        '-=0.4'
-      )
+      const words = headingRef.current?.querySelectorAll('.word')
+      gsap.set(words || [], { y: '110%', opacity: 0 })
 
-      // Scroll indicator fades in last
-      .fromTo(
-        scrollRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6 },
-        '-=0.2'
-      )
+      const tl = gsap.timeline({ delay: 0.4 })
 
-      // ── 3. Background text parallax on scroll ────────
-      // Large decorative text moves at different speed
-      // than the page — creates depth illusion
-      if (bgTextRef.current) {
-        gsap.to(bgTextRef.current, {
-          y: '-30%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true, // Ties animation directly to scroll position
-          },
-        })
-      }
+      tl.to(lineRef.current, {
+        opacity: 1,
+        scaleX: 1,
+        duration: 1.2,
+        ease: 'power4.inOut',
+      })
 
-      // ── 4. Hero fades out as user scrolls away ───────
-      gsap.to(heroRef.current, {
-        opacity: 0.3,
-        scale: 0.98,
+      tl.to(labelRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power3.out',
+      }, '-=0.5')
+
+      tl.to(subRef.current, {
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power3.out',
+      }, '-=0.3')
+
+      tl.to(words || [], {
+        y: '0%',
+        opacity: 1,
+        duration: 1.1,
+        stagger: 0.13,
+        ease: 'power4.out',
+      }, '-=0.2')
+
+      tl.to(bottomRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+      }, '-=0.4')
+
+      gsap.to(bgRef.current, {
+        yPercent: 20,
         ease: 'none',
         scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'center top',
+          trigger: sectionRef.current,
+          start: 'top top',
           end: 'bottom top',
           scrub: true,
         },
       })
 
-    }, heroRef)
+      gsap.to(headingRef.current, {
+        y: -80,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: '10% top',
+          end: '50% top',
+          scrub: true,
+        },
+      })
 
-    return () => ctx.revert() // Cleanup all GSAP animations
+    }, sectionRef)
+
+    return () => ctx.revert()
   }, [])
 
   return (
     <section
-      ref={heroRef}
-      className="relative w-full min-h-screen flex flex-col 
-                 items-center justify-center overflow-hidden px-8"
+      ref={sectionRef}
+      style={{ position: 'relative', height: '100vh', width: '100%', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
     >
-
-      {/* ── Decorative background text (parallax) ─────── */}
-      <div
-        ref={bgTextRef}
-        className="absolute inset-0 flex items-center justify-center
-                   pointer-events-none select-none overflow-hidden"
-        aria-hidden="true"
-      >
-        <span
-          className="font-heading text-[20vw] font-bold leading-none
-                     text-white opacity-[0.02] whitespace-nowrap"
-        >
-          NOIR
-        </span>
+      <div ref={bgRef} style={{ position: 'absolute', inset: 0, top: '-20%', bottom: '-20%' }}>
+        <div style={{ position: 'absolute', inset: 0, background: '#080808' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 40% at 60% 0%, rgba(201,169,110,0.13) 0%, transparent 70%)' }} />
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.04, ...GRAIN }} />
       </div>
 
-      {/* ── Main content ──────────────────────────────── */}
-      <div className="relative z-10 text-center max-w-6xl mx-auto">
+      <div style={{ position: 'relative', zIndex: 10, padding: '80px 0 0 0' }}>
 
-        {/* Eyebrow label */}
-        <p className="font-body text-noir-accent text-xs tracking-[0.4em] 
-                      uppercase mb-8 opacity-80">
-          Creative Digital Studio
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
+          <div
+            ref={lineRef}
+            style={{ width: '56px', height: '1px', background: '#c9a96e', transform: 'scaleX(1)', transformOrigin: 'left center' }}
+          />
+          <span
+            ref={labelRef}
+            style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '10px', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#c9a96e' }}
+          >
+            Creative Studio
+          </span>
+        </div>
+
+        <p
+          ref={subRef}
+          style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(240,237,230,0.3)', marginBottom: '32px' }}
+        >
+          Est. 2024
         </p>
 
-        {/* Main headline — words animate in individually */}
         <h1
-          ref={headlineRef}
-          className="font-heading text-[clamp(3rem,9vw,9rem)] 
-                     font-light leading-[1.05] text-noir-text mb-8
-                     tracking-tight"
+          ref={headingRef}
+          style={{ fontFamily: 'var(--font-cormorant), serif', fontSize: 'clamp(4rem,11vw,10rem)', lineHeight: 0.9, color: '#f0ede6', marginBottom: '64px', fontWeight: 300 }}
         >
-          We craft digital experiences that move people
+          {WORDS.map((word, i) => (
+            <span key={i} style={{ display: 'inline-block', overflow: 'hidden', marginRight: '0.2em' }}>
+              <span className="word" style={{ display: 'inline-block' }}>
+                {word}
+              </span>
+            </span>
+          ))}
         </h1>
 
-        {/* Subline */}
-        <p
-          ref={sublineRef}
-          className="font-body text-noir-muted text-lg md:text-xl 
-                     max-w-xl mx-auto leading-relaxed mb-12"
+        <div
+          ref={bottomRef}
+          style={{ display: 'flex', flexDirection: 'column', gap: '32px', opacity: 0 }}
         >
-          Cinematic websites and brand identities for companies 
-          that refuse to be ordinary.
-        </p>
+          <p style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '13px', color: 'rgba(240,237,230,0.4)', maxWidth: '260px', lineHeight: 1.7 }}>
+            Bespoke digital experiences for brands that refuse to be ordinary.
+          </p>
+          
+          <a
+            href="/work"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '20px', fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(240,237,230,0.6)' }}
+          >
+            <span>View Work</span>
+            <span style={{ display: 'block', width: '64px', height: '1px', background: 'currentColor' }} />
+          </a>
+        </div>
 
-        {/* CTA Buttons */}
-        <div className="flex items-center justify-center gap-6 flex-wrap">
-          
-            href="#work"
-            className="font-body text-sm tracking-widest uppercase
-                       bg-noir-accent text-noir-bg px-8 py-4
-                       hover:bg-transparent hover:text-noir-accent
-                       border border-noir-accent
-                       transition-all duration-500"
-            data-cursor-hover
-          >
-            View Work
-          </a>
-          
-            href="#contact"
-            className="font-body text-sm tracking-widest uppercase
-                       text-noir-text border-b border-noir-muted pb-1
-                       hover:border-noir-accent hover:text-noir-accent
-                       transition-all duration-300"
-            data-cursor-hover
-          >
-            Start a Project →
-          </a>
+      </div>
+
+      <div style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+        <span style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '9px', letterSpacing: '0.4em', textTransform: 'uppercase', color: 'rgba(240,237,230,0.2)' }}>
+          Scroll
+        </span>
+        <div style={{ width: '1px', height: '56px', background: 'rgba(240,237,230,0.08)', position: 'relative', overflow: 'hidden' }}>
+          <div className="animate-scroll-line" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#c9a96e' }} />
         </div>
       </div>
 
-      {/* ── Scroll indicator ──────────────────────────── */}
-      <div
-        ref={scrollRef}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2
-                   flex flex-col items-center gap-3"
-      >
-        <span className="font-body text-xs tracking-[0.3em] uppercase 
-                         text-noir-muted">
-          Scroll
+      <div style={{ position: 'absolute', top: '96px', right: '80px' }}>
+        <span style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '9px', letterSpacing: '0.3em', color: 'rgba(240,237,230,0.12)', textTransform: 'uppercase' }}>
+          001 / Hero
         </span>
-        {/* Animated scroll line */}
-        <div className="w-px h-12 bg-noir-muted relative overflow-hidden">
-          <div
-            className="absolute top-0 left-0 w-full bg-noir-accent
-                       animate-scroll-line"
-            style={{ height: '100%' }}
-          />
-        </div>
       </div>
 
     </section>
