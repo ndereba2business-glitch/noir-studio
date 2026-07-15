@@ -6,10 +6,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+type FormStatus = 'idle' | 'sending' | 'success' | 'error'
+
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [hovered, setHovered] = useState(false)
+
+  // ── Form state ──────────────────────────────────────────────
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [status, setStatus] = useState<FormStatus>('idle')
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -37,6 +45,19 @@ export default function Contact() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 75%',
+          toggleActions: 'play none none none',
+        },
+      })
+
+      gsap.from('.contact-form-field', {
+        opacity: 0,
+        y: 24,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.contact-form',
+          start: 'top 85%',
           toggleActions: 'play none none none',
         },
       })
@@ -69,6 +90,54 @@ export default function Contact() {
 
     return () => ctx.revert()
   }, [])
+
+  // ── Submit handler ──────────────────────────────────────────
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setStatus('sending')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message }),
+      })
+
+      if (!res.ok) {
+        throw new Error('Request failed')
+      }
+
+      setStatus('success')
+      setName('')
+      setEmail('')
+      setMessage('')
+    } catch (err) {
+      console.error('Contact form error:', err)
+      setStatus('error')
+    }
+  }
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    background: 'transparent',
+    border: 'none',
+    borderBottom: '1px solid rgba(240,237,230,0.15)',
+    color: '#f0ede6',
+    fontFamily: 'var(--font-dm-sans), sans-serif',
+    fontSize: '1rem',
+    padding: '14px 0',
+    outline: 'none',
+  }
+
+  const labelStyle: React.CSSProperties = {
+    fontFamily: 'var(--font-dm-sans), sans-serif',
+    fontSize: '10px',
+    letterSpacing: '0.3em',
+    textTransform: 'uppercase',
+    color: 'rgba(240,237,230,0.35)',
+    marginBottom: '10px',
+    display: 'block',
+  }
 
   return (
     <section
@@ -129,7 +198,7 @@ export default function Contact() {
           fontSize: 'clamp(1rem, 2vw, 1.3rem)',
           color: hovered ? '#c9a96e' : 'rgba(240,237,230,0.5)',
           letterSpacing: '0.02em',
-          marginBottom: '100px',
+          marginBottom: '80px',
           borderBottom: hovered ? '1px solid #c9a96e' : '1px solid rgba(240,237,230,0.15)',
           paddingBottom: '6px',
           transition: 'color 0.4s ease, border-color 0.4s ease',
@@ -137,6 +206,100 @@ export default function Contact() {
       >
         hello@noirstudio.com
       </a>
+
+      {/* ── Contact Form ──────────────────────────────────────── */}
+      <form
+        onSubmit={handleSubmit}
+        className="contact-form"
+        style={{
+          maxWidth: '640px',
+          marginBottom: '100px',
+          borderTop: '1px solid rgba(240,237,230,0.08)',
+          paddingTop: '48px',
+        }}
+      >
+        <div className="contact-form-field" style={{ marginBottom: '32px' }}>
+          <label style={labelStyle} htmlFor="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={inputStyle}
+            placeholder="Your name"
+          />
+        </div>
+
+        <div className="contact-form-field" style={{ marginBottom: '32px' }}>
+          <label style={labelStyle} htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={inputStyle}
+            placeholder="you@example.com"
+          />
+        </div>
+
+        <div className="contact-form-field" style={{ marginBottom: '40px' }}>
+          <label style={labelStyle} htmlFor="message">Message</label>
+          <textarea
+            id="message"
+            required
+            rows={4}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            style={{ ...inputStyle, resize: 'vertical' as const, fontFamily: 'var(--font-dm-sans), sans-serif' }}
+            placeholder="Tell us about your project"
+          />
+        </div>
+
+        <div className="contact-form-field" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            style={{
+              fontFamily: 'var(--font-dm-sans), sans-serif',
+              fontSize: '11px',
+              letterSpacing: '0.25em',
+              textTransform: 'uppercase',
+              color: '#080808',
+              background: '#c9a96e',
+              border: 'none',
+              padding: '16px 40px',
+              cursor: status === 'sending' ? 'not-allowed' : 'pointer',
+              opacity: status === 'sending' ? 0.6 : 1,
+            }}
+          >
+            {status === 'sending' ? 'Sending...' : 'Send Message'}
+          </button>
+
+          {status === 'success' && (
+            <span style={{
+              fontFamily: 'var(--font-dm-sans), sans-serif',
+              fontSize: '12px',
+              color: '#c9a96e',
+              letterSpacing: '0.05em',
+            }}>
+              Message sent — thank you.
+            </span>
+          )}
+
+          {status === 'error' && (
+            <span style={{
+              fontFamily: 'var(--font-dm-sans), sans-serif',
+              fontSize: '12px',
+              color: '#d98b8b',
+              letterSpacing: '0.05em',
+            }}>
+              Something went wrong. Please try again.
+            </span>
+          )}
+        </div>
+      </form>
 
       <div
         className="contact-details"

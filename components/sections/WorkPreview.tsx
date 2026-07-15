@@ -53,7 +53,8 @@ export default function WorkPreview() {
           Selected <br />
           <em>Work</em>
         </h2>
-        
+
+        <a
           href="/work"
           className="font-body text-sm tracking-widest uppercase
                      text-noir-accent hover:text-noir-text
