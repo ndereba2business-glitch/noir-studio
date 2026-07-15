@@ -97,8 +97,7 @@ export default function Work() {
     gsap.killTweensOf(previewRef.current)
     gsap.to(previewRef.current, {
       opacity: 1,
-      scaleX: 1,
-      scaleY: 1,
+      transform: 'scale(1)',
       duration: 0.45,
       ease: 'power3.out',
     })
@@ -109,8 +108,7 @@ export default function Work() {
     gsap.killTweensOf(previewRef.current)
     gsap.to(previewRef.current, {
       opacity: 0,
-      scaleX: 0.88,
-      scaleY: 0.88,
+      transform: 'scale(0.88)',
       duration: 0.35,
       ease: 'power2.in',
     })
@@ -152,8 +150,7 @@ export default function Work() {
           pointerEvents: 'none',
           zIndex: 50,
           opacity: 0,
-          scaleX: 0.88,
-          scaleY: 0.88,
+          transform: 'scale(0.88)',
           top: 0,
           left: 0,
           boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
