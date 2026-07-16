@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Link from 'next/link' // Added next/link import
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -41,14 +42,144 @@ const PROJECTS = [
   },
 ]
 
+type Project = (typeof PROJECTS)[number]
+
+function AccordionItem({
+  item,
+  isActive,
+  onActivate,
+}: {
+  item: Project
+  isActive: boolean
+  onActivate: () => void
+}) {
+  return (
+    <div
+      onMouseEnter={onActivate}
+      onClick={onActivate}
+      className="transition-all duration-700 ease-in-out"
+      style={{
+        position: 'relative',
+        flexShrink: 0,
+        height: '480px',
+        width: isActive ? '420px' : '64px',
+        maxWidth: isActive ? '60vw' : '64px',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        background: item.bg,
+        border: '1px solid rgba(240,237,230,0.08)',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 45%)',
+        }}
+      />
+
+      <span
+        style={{
+          position: 'absolute',
+          top: '24px',
+          left: '24px',
+          fontFamily: 'var(--font-cormorant), serif',
+          fontSize: '2.5rem',
+          fontWeight: 300,
+          color: item.color,
+          opacity: isActive ? 0.6 : 0.35,
+          transition: 'opacity 0.5s ease',
+          lineHeight: 1,
+        }}
+      >
+        {item.id}
+      </span>
+
+      {isActive && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '24px',
+            left: '24px',
+            right: '24px',
+            opacity: 1,
+            transition: 'opacity 0.5s ease 0.15s',
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: 'var(--font-cormorant), serif',
+              fontSize: 'clamp(1.6rem, 2.4vw, 2.2rem)',
+              fontWeight: 300,
+              color: '#f0ede6',
+              marginBottom: '10px',
+              lineHeight: 1.1,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {item.title}
+          </h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-dm-sans), sans-serif',
+                fontSize: '10px',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'rgba(240,237,230,0.45)',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {item.category}
+            </span>
+            <span
+              style={{
+                fontFamily: 'var(--font-dm-sans), sans-serif',
+                fontSize: '10px',
+                letterSpacing: '0.1em',
+                color: 'rgba(240,237,230,0.3)',
+              }}
+            >
+              {item.year}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {!isActive && (
+        <span
+          style={{
+            position: 'absolute',
+            bottom: '32px',
+            left: '50%',
+            transform: 'translateX(-50%) rotate(90deg)',
+            transformOrigin: 'left center',
+            whiteSpace: 'nowrap',
+            fontFamily: 'var(--font-dm-sans), sans-serif',
+            fontSize: '10px',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'rgba(240,237,230,0.4)',
+          }}
+        >
+          {item.title}
+        </span>
+      )}
+    </div>
+  )
+}
+
 export default function Work() {
   const sectionRef = useRef<HTMLElement>(null)
-  const previewRef = useRef<HTMLDivElement>(null)
-  const [activeProject, setActiveProject] = useState<number | null>(null)
+  const [activeIndex, setActiveIndex] = useState(2)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-
       gsap.from('.work-header', {
         y: 50,
         opacity: 0,
@@ -61,75 +192,25 @@ export default function Work() {
         },
       })
 
-      gsap.from('.project-row', {
-        y: 24,
+      gsap.from('.accordion-track', {
+        y: 30,
         opacity: 0,
-        duration: 0.9,
-        stagger: 0.1,
+        duration: 1,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: '.projects-list',
-          start: 'top 82%',
+          trigger: '.accordion-track',
+          start: 'top 85%',
           toggleActions: 'play none none none',
         },
       })
-
     }, sectionRef)
 
     return () => ctx.revert()
   }, [])
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!previewRef.current || !sectionRef.current) return
-    const rect = sectionRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    gsap.to(previewRef.current, {
-      x: x - 140,
-      y: y - 100,
-      duration: 0.5,
-      ease: 'power2.out',
-    })
-  }
-
-  const handleProjectEnter = (index: number) => {
-    setActiveProject(index)
-    gsap.killTweensOf(previewRef.current)
-    gsap.to(previewRef.current, {
-      opacity: 1,
-      transform: 'scale(1)',
-      duration: 0.45,
-      ease: 'power3.out',
-    })
-  }
-
-  const handleProjectLeave = () => {
-    setActiveProject(null)
-    gsap.killTweensOf(previewRef.current)
-    gsap.to(previewRef.current, {
-      opacity: 0,
-      transform: 'scale(0.88)',
-      duration: 0.35,
-      ease: 'power2.in',
-    })
-  }
-
-  const handleRowOver = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget
-    gsap.to(el, { paddingLeft: 16, duration: 0.35, ease: 'power2.out' })
-    el.style.borderTopColor = 'rgba(201,169,110,0.4)'
-  }
-
-  const handleRowOut = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget
-    gsap.to(el, { paddingLeft: 0, duration: 0.35, ease: 'power2.out' })
-    el.style.borderTopColor = 'rgba(240,237,230,0.07)'
-  }
-
   return (
     <section
       ref={sectionRef}
-      onMouseMove={handleMouseMove}
       style={{
         position: 'relative',
         width: '100%',
@@ -138,91 +219,37 @@ export default function Work() {
         overflow: 'hidden',
       }}
     >
-
-      <div
-        ref={previewRef}
-        style={{
-          position: 'absolute',
-          width: '300px',
-          height: '210px',
-          borderRadius: '3px',
-          overflow: 'hidden',
-          pointerEvents: 'none',
-          zIndex: 50,
-          opacity: 0,
-          transform: 'scale(0.88)',
-          top: 0,
-          left: 0,
-          boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
-        }}
-      >
-        {PROJECTS.map((project, i) => (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: project.bg,
-              opacity: activeProject === i ? 1 : 0,
-              transition: 'opacity 0.35s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'column',
-              gap: '8px',
-            }}
-          >
-            <span style={{
-              fontFamily: 'var(--font-cormorant), serif',
-              fontSize: '4rem',
-              color: project.color,
-              opacity: 0.5,
-              fontWeight: 300,
-              lineHeight: 1,
-            }}>
-              {project.id}
-            </span>
-            <span style={{
-              fontFamily: 'var(--font-dm-sans), sans-serif',
-              fontSize: '9px',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: project.color,
-              opacity: 0.4,
-            }}>
-              {project.title}
-            </span>
-          </div>
-        ))}
-      </div>
-
       <div className="work-header" style={{ marginBottom: '72px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '28px' }}>
           <div style={{ width: '40px', height: '1px', background: '#c9a96e' }} />
-          <span style={{
-            fontFamily: 'var(--font-dm-sans), sans-serif',
-            fontSize: '10px',
-            letterSpacing: '0.4em',
-            textTransform: 'uppercase',
-            color: '#c9a96e',
-          }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-dm-sans), sans-serif',
+              fontSize: '10px',
+              letterSpacing: '0.4em',
+              textTransform: 'uppercase',
+              color: '#c9a96e',
+            }}
+          >
             Selected Work
           </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-          <h2 style={{
-            fontFamily: 'var(--font-cormorant), serif',
-            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-            fontWeight: 300,
-            color: '#f0ede6',
-            lineHeight: 1,
-            letterSpacing: '-0.02em',
-          }}>
+          <h2
+            style={{
+              fontFamily: 'var(--font-cormorant), serif',
+              fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+              fontWeight: 300,
+              color: '#f0ede6',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
+          >
             Recent Projects
           </h2>
-          
-          <a
+
+          <Link
             href="/work"
             style={{
               fontFamily: 'var(--font-dm-sans), sans-serif',
@@ -238,78 +265,29 @@ export default function Work() {
           >
             <span>View All</span>
             <span style={{ width: '28px', height: '1px', background: 'currentColor', display: 'block' }} />
-          </a>
+          </Link>
         </div>
       </div>
 
-      <div className="projects-list">
+      <div
+        className="accordion-track"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          overflowX: 'auto',
+          paddingBottom: '8px',
+        }}
+      >
         {PROJECTS.map((project, i) => (
-          <div
-            key={i}
-            className="project-row"
-            onMouseEnter={() => handleProjectEnter(i)}
-            onMouseLeave={handleProjectLeave}
-            onMouseOver={handleRowOver}
-            onMouseOut={handleRowOut}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '32px 0',
-              paddingLeft: '0px',
-              borderTop: '1px solid rgba(240,237,230,0.07)',
-              cursor: 'pointer',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '36px' }}>
-              <span style={{
-                fontFamily: 'var(--font-dm-sans), sans-serif',
-                fontSize: '10px',
-                color: 'rgba(240,237,230,0.18)',
-                letterSpacing: '0.08em',
-                minWidth: '24px',
-              }}>
-                {project.id}
-              </span>
-              <h3 style={{
-                fontFamily: 'var(--font-cormorant), serif',
-                fontSize: 'clamp(1.9rem, 3.5vw, 3.2rem)',
-                fontWeight: 300,
-                color: '#f0ede6',
-                letterSpacing: '-0.01em',
-                lineHeight: 1,
-              }}>
-                {project.title}
-              </h3>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '64px' }}>
-              <span style={{
-                fontFamily: 'var(--font-dm-sans), sans-serif',
-                fontSize: '10px',
-                color: 'rgba(240,237,230,0.3)',
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-              }}>
-                {project.category}
-              </span>
-              <span style={{
-                fontFamily: 'var(--font-dm-sans), sans-serif',
-                fontSize: '10px',
-                color: 'rgba(240,237,230,0.18)',
-                letterSpacing: '0.08em',
-                minWidth: '36px',
-                textAlign: 'right' as const,
-              }}>
-                {project.year}
-              </span>
-            </div>
-          </div>
+          <AccordionItem
+            key={project.id}
+            item={project}
+            isActive={i === activeIndex}
+            onActivate={() => setActiveIndex(i)}
+          />
         ))}
-
-        <div style={{ borderTop: '1px solid rgba(240,237,230,0.07)' }} />
       </div>
-
     </section>
   )
 }
