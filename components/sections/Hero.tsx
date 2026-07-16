@@ -138,8 +138,8 @@ export default function Hero() {
           }}
         />
         <div style={{ position: 'absolute', inset: 0, opacity: 0.04, ...GRAIN }} />
-        <FloatingShapes />
       </div>
+      <FloatingShapes />
 
       <div style={{ position: 'relative', zIndex: 10, padding: '80px 0 0 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
