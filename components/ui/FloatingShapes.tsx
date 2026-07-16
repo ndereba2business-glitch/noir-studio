@@ -9,13 +9,12 @@ interface ShapeConfig {
   left?: string
   right?: string
   delay: number
-  opacity: number
 }
 
 const SHAPES: ShapeConfig[] = [
-  { size: 420, top: '10%', left: '-8%', delay: 0.2, opacity: 0.06 },
-  { size: 320, top: '65%', right: '-6%', delay: 0.4, opacity: 0.05 },
-  { size: 180, top: '5%', right: '18%', delay: 0.6, opacity: 0.04 },
+  { size: 380, top: '18%', left: '2%', delay: 0.2 },
+  { size: 280, top: '55%', right: '4%', delay: 0.4 },
+  { size: 160, top: '8%', right: '22%', delay: 0.6 },
 ]
 
 export default function FloatingShapes() {
@@ -23,9 +22,9 @@ export default function FloatingShapes() {
 
   useEffect(() => {
     const shapes = containerRef.current?.querySelectorAll('.floating-shape')
-    if (!shapes) return
+    if (!shapes || shapes.length === 0) return
 
-    gsap.set(shapes, { opacity: 0, y: -60 })
+    gsap.set(shapes, { opacity: 0, y: -40 })
     gsap.to(shapes, {
       opacity: 1,
       y: 0,
@@ -46,7 +45,12 @@ export default function FloatingShapes() {
   }, [])
 
   return (
-    <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div
+      ref={containerRef}
+      className="absolute inset-0 overflow-hidden pointer-events-none"
+      style={{ zIndex: 1 }}
+      aria-hidden="true"
+    >
       {SHAPES.map((s, i) => (
         <div
           key={i}
@@ -57,9 +61,8 @@ export default function FloatingShapes() {
             top: s.top,
             left: s.left,
             right: s.right,
-            background: 'radial-gradient(circle, rgba(201,169,110,0.35) 0%, transparent 70%)',
-            filter: 'blur(2px)',
-            opacity: s.opacity,
+            background: 'radial-gradient(circle, rgba(201,169,110,0.55) 0%, transparent 72%)',
+            filter: 'blur(30px)',
           }}
         />
       ))}
