@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import Link from 'next/link' // Added next/link import
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -15,6 +14,8 @@ const PROJECTS = [
     year: '2024',
     color: '#c9a96e',
     bg: 'linear-gradient(135deg, #1a1208 0%, #2d1f0e 50%, #1a1208 100%)',
+    description:
+      'A full brand identity and e-commerce experience for a botanical skincare line, built around restraint and quiet luxury — soft type, warm tones, and a shopping flow that feels more like a boutique visit than a checkout.',
   },
   {
     id: '02',
@@ -23,6 +24,8 @@ const PROJECTS = [
     year: '2024',
     color: '#8BA3B8',
     bg: 'linear-gradient(135deg, #080d12 0%, #111820 50%, #080d12 100%)',
+    description:
+      'A portfolio site for an architecture studio, structured around large-format imagery and scroll-triggered motion that mirrors the pacing of walking through a physical space.',
   },
   {
     id: '03',
@@ -31,6 +34,8 @@ const PROJECTS = [
     year: '2023',
     color: '#B8A898',
     bg: 'linear-gradient(135deg, #100e0a 0%, #1e1a14 50%, #100e0a 100%)',
+    description:
+      'Creative direction and interface design for a multidisciplinary studio, unifying a fragmented brand under one clear visual language across web, deck, and social.',
   },
   {
     id: '04',
@@ -39,6 +44,8 @@ const PROJECTS = [
     year: '2023',
     color: '#7A8A9A',
     bg: 'linear-gradient(135deg, #0a0a0f 0%, #14141e 50%, #0a0a0f 100%)',
+    description:
+      'A complete design system and dashboard rebuild for a fintech product, focused on data clarity, trust signals, and reducing cognitive load for first-time users.',
   },
 ]
 
@@ -62,8 +69,8 @@ function AccordionItem({
         position: 'relative',
         flexShrink: 0,
         height: '480px',
-        width: isActive ? '420px' : '64px',
-        maxWidth: isActive ? '60vw' : '64px',
+        width: isActive ? '340px' : '64px',
+        maxWidth: isActive ? '50vw' : '64px',
         borderRadius: '16px',
         overflow: 'hidden',
         cursor: 'pointer',
@@ -174,6 +181,96 @@ function AccordionItem({
   )
 }
 
+function DescriptionPanel({ project }: { project: Project }) {
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!panelRef.current) return
+    gsap.fromTo(
+      panelRef.current,
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+    )
+  }, [project.id])
+
+  return (
+    <div
+      ref={panelRef}
+      style={{
+        flex: 1,
+        minWidth: '280px',
+        paddingLeft: '48px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '480px',
+      }}
+    >
+      <span
+        style={{
+          fontFamily: 'var(--font-dm-sans), sans-serif',
+          fontSize: '10px',
+          letterSpacing: '0.3em',
+          textTransform: 'uppercase',
+          color: project.color,
+          marginBottom: '20px',
+          display: 'block',
+        }}
+      >
+        {project.id} — {project.category}
+      </span>
+
+      <h3
+        style={{
+          fontFamily: 'var(--font-cormorant), serif',
+          fontSize: 'clamp(1.8rem, 2.8vw, 2.6rem)',
+          fontWeight: 300,
+          color: '#f0ede6',
+          marginBottom: '24px',
+          lineHeight: 1.15,
+        }}
+      >
+        {project.title}
+      </h3>
+
+      <p
+        style={{
+          fontFamily: 'var(--font-dm-sans), sans-serif',
+          fontSize: '14px',
+          lineHeight: 1.8,
+          color: 'rgba(240,237,230,0.5)',
+          maxWidth: '420px',
+          marginBottom: '32px',
+        }}
+      >
+        {project.description}
+      </p>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <span
+          style={{
+            width: '32px',
+            height: '1px',
+            background: project.color,
+            display: 'block',
+          }}
+        />
+        <span
+          style={{
+            fontFamily: 'var(--font-dm-sans), sans-serif',
+            fontSize: '10px',
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            color: 'rgba(240,237,230,0.35)',
+          }}
+        >
+          {project.year}
+        </span>
+      </div>
+    </div>
+  )
+}
+
 export default function Work() {
   const sectionRef = useRef<HTMLElement>(null)
   const [activeIndex, setActiveIndex] = useState(2)
@@ -192,13 +289,13 @@ export default function Work() {
         },
       })
 
-      gsap.from('.accordion-track', {
+      gsap.from('.accordion-row', {
         y: 30,
         opacity: 0,
         duration: 1,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: '.accordion-track',
+          trigger: '.accordion-row',
           start: 'top 85%',
           toggleActions: 'play none none none',
         },
@@ -249,7 +346,7 @@ export default function Work() {
             Recent Projects
           </h2>
 
-          <Link
+          <a
             href="/work"
             style={{
               fontFamily: 'var(--font-dm-sans), sans-serif',
@@ -265,28 +362,40 @@ export default function Work() {
           >
             <span>View All</span>
             <span style={{ width: '28px', height: '1px', background: 'currentColor', display: 'block' }} />
-          </Link>
+          </a>
         </div>
       </div>
 
       <div
-        className="accordion-track"
+        className="accordion-row"
         style={{
           display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          overflowX: 'auto',
-          paddingBottom: '8px',
+          alignItems: 'stretch',
+          width: '100%',
         }}
       >
-        {PROJECTS.map((project, i) => (
-          <AccordionItem
-            key={project.id}
-            item={project}
-            isActive={i === activeIndex}
-            onActivate={() => setActiveIndex(i)}
-          />
-        ))}
+        <div
+          className="accordion-track"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            overflowX: 'auto',
+            paddingBottom: '8px',
+            flexShrink: 0,
+          }}
+        >
+          {PROJECTS.map((project, i) => (
+            <AccordionItem
+              key={project.id}
+              item={project}
+              isActive={i === activeIndex}
+              onActivate={() => setActiveIndex(i)}
+            />
+          ))}
+        </div>
+
+        <DescriptionPanel project={PROJECTS[activeIndex]} />
       </div>
     </section>
   )
