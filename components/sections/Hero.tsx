@@ -141,7 +141,7 @@ export default function Hero() {
       </div>
       <FloatingShapes />
 
-      <div style={{ position: 'relative', zIndex: 10, padding: '80px 0 0 0' }}>
+      <div className="hero-content-padding" style={{ position: 'relative', zIndex: 10, padding: '80px 0 0 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
           <div
             ref={lineRef}

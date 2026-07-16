@@ -142,6 +142,7 @@ export default function Contact() {
   return (
     <section
       ref={sectionRef}
+      className="contact-section-padding"
       style={{
         position: 'relative',
         width: '100%',
