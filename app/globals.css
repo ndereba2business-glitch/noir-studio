@@ -1,30 +1,58 @@
-﻿@tailwind base;
+﻿/* app/globals.css */
+
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   ROOT VARIABLES — Your design system tokens
+   Change these to change the entire site feel
+   ============================================ */
 :root {
   --color-bg: #080808;
   --color-text: #f0ede6;
   --color-accent: #c9a96e;
   --color-muted: #4a4a4a;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+/* ============================================
+   BASE RESET — Consistent across all browsers
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-  background-color: #080808;
-  scroll-behavior: auto;
+  scroll-behavior: auto; /* Lenis handles smooth scroll, not CSS */
+  background-color: var(--color-bg);
 }
 
 body {
-  background-color: #080808;
-  color: #f0ede6;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
   overflow-x: hidden;
-  cursor: none;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  cursor: none; /* Custom cursor fallback */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 body::-webkit-scrollbar {
-  display: none;
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+/* ============================================
+   TYPOGRAPHY SCALE
+   ============================================ */
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 a {
@@ -32,14 +60,12 @@ a {
   text-decoration: none;
 }
 
+/* ============================================
+   SELECTION COLOR — Small luxury touch
+   ============================================ */
 ::selection {
-  background-color: #c9a96e;
-  color: #080808;
-}
-@media (min-width: 768px) {
-  .project-category {
-    display: block !important;
-  }
+  background-color: var(--color-accent);
+  color: var(--color-bg);
 }
 
 /* ============================================
@@ -94,7 +120,7 @@ a {
 }
 
 /* ============================================
-   WORK ROW: stack on mobile
+   WORK ROW / PROJECT STYLING
    ============================================ */
 .work-row {
   display: flex;
@@ -108,6 +134,33 @@ a {
     align-items: flex-start;
     gap: 12px;
   }
+}
+
+@media (min-width: 768px) {
+  .project-category {
+    display: block !important;
+  }
+}
+
+/* ============================================
+   ANIMATIONS & EFFECTS
+   ============================================ */
+@keyframes scrollLine {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.animate-scroll-line {
+  animation: scrollLine 1.8s ease-in-out infinite;
+}
+
+.word-wrapper {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.word {
+  display: inline-block;
 }
 
 /* ============================================

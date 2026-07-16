@@ -1,48 +1,51 @@
-// tailwind.config.ts
-
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      // ── Colors ──────────────────────────────
       colors: {
-        'noir-bg': '#080808',
-        'noir-text': '#f0ede6',
-        'noir-accent': '#c9a96e',
-        'noir-muted': '#4a4a4a',
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        noir: {
+          void: "#050505",
+          onyx: "#121212",
+          card: "#181818",
+          silver: "#E5E5E5",
+          muted: "#8E8E93",
+        }
       },
-
-      // ── Typography ──────────────────────────
       fontFamily: {
-        heading: ['Cormorant Garamond', 'serif'],
-        body: ['DM Sans', 'sans-serif'],
+        sans: ["var(--font-jakarta)", "sans-serif"],
+        display: ["var(--font-cinzel)", "serif"],
       },
-
-      // ── Spacing scale ───────────────────────
-      spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
-        '128': '32rem',
+      transitionTimingFunction: {
+        "bezier-premium": "cubic-bezier(0.16, 1, 0.3, 1)", // Ultra-smooth cinematic deceleration
       },
-
-      // ── Screen sizes ────────────────────────
-      screens: {
-        'xs': '375px',
-        'sm': '640px',
-        'md': '768px',
-        'lg': '1024px',
-        'xl': '1280px',
-        '2xl': '1536px',
+      animation: {
+        "noise-grain": "noise 0.2s infinite",
+        "glow-pulse": "glow 8s ease-in-out infinite alternate",
       },
+      keyframes: {
+        noise: {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "10%": { transform: "translate(-1%, -1%)" },
+          "30%": { transform: "translate(-2%, -2%)" },
+          "50%": { transform: "translate(-1%, 2%)" },
+          "70%": { transform: "translate(1%, -2%)" },
+          "90%": { transform: "translate(-2%, 1%)" },
+        },
+        glow: {
+          "0%": { opacity: "0.3", filter: "blur(80px)" },
+          "100%": { opacity: "0.6", filter: "blur(120px)" },
+        }
+      }
     },
   },
   plugins: [],
-}
-
-export default config
+};
+export default config;
