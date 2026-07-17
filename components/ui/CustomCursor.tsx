@@ -101,13 +101,13 @@ export default function CustomCursor() {
       {/* Inner dot — snappy, precise */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-noir-accent rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+        className="fixed top-0 left-0 w-2 h-2 bg-forge-eleven-accent rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
       />
 
       {/* Outer ring — lagged, expands on hover */}
       <div
         ref={ringRef}
-        className="fixed top-0 left-0 w-8 h-8 border border-noir-accent rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2"
+        className="fixed top-0 left-0 w-8 h-8 border border-forge-eleven-accent rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2"
       />
     </>
   )

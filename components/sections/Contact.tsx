@@ -190,7 +190,7 @@ export default function Contact() {
       </h2>
 
       <a
-        href="mailto:hello@noirstudio.com"
+        href="mailto:hello@forgeleven.com"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
@@ -205,7 +205,7 @@ export default function Contact() {
           transition: 'color 0.4s ease, border-color 0.4s ease',
         }}
       >
-        hello@noirstudio.com
+        hello@forgeleven.com
       </a>
 
       {/* ── Contact Form ──────────────────────────────────────── */}
@@ -327,7 +327,7 @@ export default function Contact() {
             color: '#f0ede6',
             fontWeight: 300,
           }}>
-            Nairobi, Kenya
+            Meru, Kenya
           </p>
         </div>
 
@@ -348,7 +348,7 @@ export default function Contact() {
             color: '#f0ede6',
             fontWeight: 300,
           }}>
-            Open for Projects
+            Open for Projects 24/7
           </p>
         </div>
 
@@ -361,7 +361,7 @@ export default function Contact() {
             color: 'rgba(240,237,230,0.3)',
             marginBottom: '14px',
           }}>
-            Social
+            Social media
           </p>
           <div style={{ display: 'flex', gap: '20px' }}>
             {['Instagram', 'LinkedIn', 'Twitter'].map((s) => (
@@ -398,7 +398,7 @@ export default function Contact() {
           letterSpacing: '0.1em',
           color: 'rgba(240,237,230,0.25)',
         }}>
-          © 2024 Noir Studio. All rights reserved.
+          © 2024 Forge Eleven. All rights reserved.
         </span>
         <span style={{
           fontFamily: 'var(--font-dm-sans), sans-serif',

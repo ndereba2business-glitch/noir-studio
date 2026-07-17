@@ -48,8 +48,8 @@ export default function WorkPreview() {
     >
       {/* Section header */}
       <div className="flex items-end justify-between mb-20 
-                      border-b border-noir-muted pb-8">
-        <h2 className="font-heading text-6xl md:text-8xl text-noir-text font-light">
+                      border-b border-forge-eleven-muted pb-8">
+        <h2 className="font-heading text-6xl md:text-8xl text-forge-eleven-text font-light">
           Selected <br />
           <em>Work</em>
         </h2>
@@ -57,7 +57,7 @@ export default function WorkPreview() {
         <a
           href="/work"
           className="font-body text-sm tracking-widest uppercase
-                     text-noir-accent hover:text-noir-text
+                     text-forge-eleven-accent hover:text-forge-eleven-text
                      transition-colors duration-300 mb-3"
         >
           All Projects →
@@ -70,21 +70,21 @@ export default function WorkPreview() {
           <div
             key={project.id}
             className="project-item group flex items-center justify-between
-                       py-8 border-b border-noir-muted cursor-pointer
+                       py-8 border-b border-forge-eleven-muted cursor-pointer
                        hover:px-4 transition-all duration-500"
             data-cursor-hover
           >
             <div className="flex items-center gap-8">
-              <span className="font-body text-xs text-noir-muted tracking-widest">
+              <span className="font-body text-xs text-forge-eleven-muted tracking-widest">
                 {project.id}
               </span>
-              <h3 className="font-heading text-3xl md:text-5xl text-noir-text 
-                             font-light group-hover:text-noir-accent 
+              <h3 className="font-heading text-3xl md:text-5xl text-forge-eleven-text 
+                             font-light group-hover:text-forge-eleven-accent 
                              transition-colors duration-300">
                 {project.title}
               </h3>
             </div>
-            <span className="font-body text-sm text-noir-muted tracking-widest 
+            <span className="font-body text-sm text-forge-eleven-muted tracking-widest 
                              uppercase hidden md:block">
               {project.category}
             </span>

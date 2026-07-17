@@ -20,7 +20,7 @@ const cormorant = Cormorant_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: 'Noir Studio — Creative Digital Agency',
+  title: 'Forge Eleven — Creative Digital Agency',
   description: 'Cinematic web experiences for ambitious brands.',
 }
 
@@ -34,7 +34,7 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${cormorant.variable}`}
     >
-      <body className="bg-noir-bg text-noir-text antialiased">
+      <body className="bg-forge-eleven-bg text-forge-eleven-text antialiased">
         <SmoothScroll>
           <CustomCursor />
           <Navbar />

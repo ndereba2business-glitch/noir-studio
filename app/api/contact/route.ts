@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     }
 
     await resend.emails.send({
-      from: 'Noir Studio Contact <onboarding@resend.dev>',
+      from: 'Forge Eleven Contact <onboarding@resend.dev>',
       to: 'ndereba2business@gmail.com',
       subject: `New enquiry from ${name}`,
       html: `

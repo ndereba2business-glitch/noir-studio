@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        noir: {
+        "forge-eleven": {
           void: "#050505",
           onyx: "#121212",
           card: "#181818",

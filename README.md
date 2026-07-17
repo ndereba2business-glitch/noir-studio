@@ -1,4 +1,4 @@
-# Noir Studio
+# Forge eleven
 
 Cinematic web experiences for ambitious brands. Built with Next.js, GSAP (ScrollTrigger), Lenis smooth scroll, Framer Motion, and Resend for contact form delivery.
 

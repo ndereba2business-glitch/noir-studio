@@ -24,7 +24,7 @@ const PROJECTS = [
     id: '02',
     title: 'Voss Architecture',
     category: 'Web Design / Motion',
-    year: '2024',
+    year: '2023',
     color: '#8BA3B8',
     image: '/work/voss-architecture.jpg',
     bg: 'linear-gradient(135deg, #080d12 0%, #111820 50%, #080d12 100%)',
@@ -35,7 +35,7 @@ const PROJECTS = [
     id: '03',
     title: 'Serac Collective',
     category: 'Creative Direction / UI',
-    year: '2023',
+    year: '2025',
     color: '#B8A898',
     image: '/work/serac-collective.jpg',
     bg: 'linear-gradient(135deg, #100e0a 0%, #1e1a14 50%, #100e0a 100%)',
@@ -44,14 +44,14 @@ const PROJECTS = [
   },
   {
     id: '04',
-    title: 'Onyx Finance',
+    title: 'Farmers Connect',
     category: 'Web App / Design System',
-    year: '2023',
+    year: '2026',
     color: '#7A8A9A',
-    image: '/work/onyx-finance.jpg',
+    image: '/work/farmers-connect2.png',
     bg: 'linear-gradient(135deg, #0a0a0f 0%, #14141e 50%, #0a0a0f 100%)',
     description:
-      'A complete design system and dashboard rebuild for a fintech product, focused on data clarity, trust signals, and reducing cognitive load for first-time users.',
+      'A full-stack web application connecting farmers with veterinarians, marketplaces, AI-powered farming assistance, vaccination tracking, and community discussions. Designed mobile-first for Kenyan farmers, with a focus on accessibility, trust, and practical farm management.',
   },
 ]
 
@@ -84,7 +84,7 @@ function AccordionItem({
         border: '1px solid rgba(240,237,230,0.08)',
       }}
     >
-      {/* Real project imagery layer */}
+      {/* Real project imagery layer — increased opacity for sharpness */}
       <Image
         src={item.image}
         alt={item.title}
@@ -92,18 +92,20 @@ function AccordionItem({
         sizes={isActive ? "340px" : "64px"}
         style={{ 
           objectFit: 'cover',
-          opacity: isActive ? 0.45 : 0.12,
+          opacity: isActive ? 0.75 : 0.15,
           transition: 'opacity 0.7s ease-in-out',
         }}
         priority={item.id === '01'}
       />
 
-      {/* Ambient overlay */}
+      {/* Ambient overlay — pushed lower down to protect UI legibility */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 65%)',
+          background: 'linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.4) 40%, transparent 100%)',
+          transition: 'opacity 0.7s ease',
+          opacity: isActive ? 1 : 0.5,
         }}
       />
 
@@ -116,10 +118,11 @@ function AccordionItem({
           fontSize: '2.5rem',
           fontWeight: 300,
           color: item.color,
-          opacity: isActive ? 0.8 : 0.35,
+          opacity: isActive ? 0.9 : 0.35,
           transition: 'opacity 0.5s ease',
           lineHeight: 1,
           zIndex: 10,
+          textShadow: '0 2px 8px rgba(0,0,0,0.5)',
         }}
       >
         {item.id}
@@ -148,6 +151,7 @@ function AccordionItem({
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
+              textShadow: '0 2px 10px rgba(0,0,0,0.8)',
             }}
           >
             {item.title}
@@ -159,7 +163,7 @@ function AccordionItem({
                 fontSize: '10px',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                color: 'rgba(240,237,230,0.6)',
+                color: 'rgba(240,237,230,0.8)',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -172,7 +176,7 @@ function AccordionItem({
                 fontFamily: 'var(--font-dm-sans), sans-serif',
                 fontSize: '10px',
                 letterSpacing: '0.1em',
-                color: 'rgba(240,237,230,0.45)',
+                color: 'rgba(240,237,230,0.6)',
               }}
             >
               {item.year}

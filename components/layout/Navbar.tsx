@@ -37,8 +37,8 @@ export default function Navbar() {
         style={scrolled ? { background: 'rgba(8,8,8,0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)' } : {}}
       >
         <Link href="/" className="nav-item flex items-center gap-[2px]">
-          <span className="font-heading text-xl tracking-[0.15em] text-noir-text uppercase">Noir</span>
-          <span className="font-heading text-xl text-noir-accent">.</span>
+          <span className="font-heading text-xl tracking-[0.15em] text-forge-eleven-text uppercase">Forge Eleven</span>
+          <span className="font-heading text-xl text-forge-eleven-accent">.</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-10">
@@ -46,17 +46,17 @@ export default function Navbar() {
             <Link
               key={item}
               href={`/${item.toLowerCase()}`}
-              className="nav-item relative font-body text-[11px] tracking-[0.2em] uppercase text-noir-text/50 hover:text-noir-text transition-colors duration-300 group"
+              className="nav-item relative font-body text-[11px] tracking-[0.2em] uppercase text-forge-eleven-text/50 hover:text-forge-eleven-text transition-colors duration-300 group"
             >
               {item}
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-noir-accent group-hover:w-full transition-all duration-500" />
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-forge-eleven-accent group-hover:w-full transition-all duration-500" />
             </Link>
           ))}
         </div>
 
         <Link
           href="/contact"
-          className="nav-item hidden md:flex font-body text-[11px] tracking-[0.2em] uppercase text-noir-text/60 hover:text-noir-accent transition-colors duration-300 border border-noir-text/15 hover:border-noir-accent px-6 py-3"
+          className="nav-item hidden md:flex font-body text-[11px] tracking-[0.2em] uppercase text-forge-eleven-text/60 hover:text-forge-eleven-accent transition-colors duration-300 border border-forge-eleven-text/15 hover:border-forge-eleven-accent px-6 py-3"
         >
           Let&apos;s Talk
         </Link>
@@ -65,13 +65,13 @@ export default function Navbar() {
           className="nav-item md:hidden flex flex-col gap-[5px] p-2"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          <span className="w-6 h-px bg-noir-text block" />
-          <span className="w-4 h-px bg-noir-text block" />
+          <span className="w-6 h-px bg-forge-eleven-text block" />
+          <span className="w-4 h-px bg-forge-eleven-text block" />
         </button>
       </nav>
 
       <div
-        className="fixed inset-0 z-[99] bg-noir-bg flex flex-col items-center justify-center transition-all duration-500"
+        className="fixed inset-0 z-[99] bg-forge-eleven-bg flex flex-col items-center justify-center transition-all duration-500"
         style={{ opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? 'auto' : 'none' }}
       >
         {['Work', 'About', 'Contact'].map((item) => (
@@ -79,7 +79,7 @@ export default function Navbar() {
             key={item}
             href={`/${item.toLowerCase()}`}
             onClick={() => setMenuOpen(false)}
-            className="font-heading text-6xl text-noir-text hover:text-noir-accent transition-colors duration-300 py-4"
+            className="font-heading text-6xl text-forge-eleven-text hover:text-forge-eleven-accent transition-colors duration-300 py-4"
           >
             {item}
           </Link>
