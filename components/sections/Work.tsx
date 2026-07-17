@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Image from 'next/image'
+import Link from 'next/link'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -13,6 +15,7 @@ const PROJECTS = [
     category: 'Brand Identity / Web Design',
     year: '2024',
     color: '#c9a96e',
+    image: '/work/lumara-skincare.jpg',
     bg: 'linear-gradient(135deg, #1a1208 0%, #2d1f0e 50%, #1a1208 100%)',
     description:
       'A full brand identity and e-commerce experience for a botanical skincare line, built around restraint and quiet luxury — soft type, warm tones, and a shopping flow that feels more like a boutique visit than a checkout.',
@@ -23,6 +26,7 @@ const PROJECTS = [
     category: 'Web Design / Motion',
     year: '2024',
     color: '#8BA3B8',
+    image: '/work/voss-architecture.jpg',
     bg: 'linear-gradient(135deg, #080d12 0%, #111820 50%, #080d12 100%)',
     description:
       'A portfolio site for an architecture studio, structured around large-format imagery and scroll-triggered motion that mirrors the pacing of walking through a physical space.',
@@ -33,6 +37,7 @@ const PROJECTS = [
     category: 'Creative Direction / UI',
     year: '2023',
     color: '#B8A898',
+    image: '/work/serac-collective.jpg',
     bg: 'linear-gradient(135deg, #100e0a 0%, #1e1a14 50%, #100e0a 100%)',
     description:
       'Creative direction and interface design for a multidisciplinary studio, unifying a fragmented brand under one clear visual language across web, deck, and social.',
@@ -43,6 +48,7 @@ const PROJECTS = [
     category: 'Web App / Design System',
     year: '2023',
     color: '#7A8A9A',
+    image: '/work/onyx-finance.jpg',
     bg: 'linear-gradient(135deg, #0a0a0f 0%, #14141e 50%, #0a0a0f 100%)',
     description:
       'A complete design system and dashboard rebuild for a fintech product, focused on data clarity, trust signals, and reducing cognitive load for first-time users.',
@@ -78,11 +84,26 @@ function AccordionItem({
         border: '1px solid rgba(240,237,230,0.08)',
       }}
     >
+      {/* Real project imagery layer */}
+      <Image
+        src={item.image}
+        alt={item.title}
+        fill
+        sizes={isActive ? "340px" : "64px"}
+        style={{ 
+          objectFit: 'cover',
+          opacity: isActive ? 0.45 : 0.12,
+          transition: 'opacity 0.7s ease-in-out',
+        }}
+        priority={item.id === '01'}
+      />
+
+      {/* Ambient overlay */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 45%)',
+          background: 'linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 65%)',
         }}
       />
 
@@ -95,9 +116,10 @@ function AccordionItem({
           fontSize: '2.5rem',
           fontWeight: 300,
           color: item.color,
-          opacity: isActive ? 0.6 : 0.35,
+          opacity: isActive ? 0.8 : 0.35,
           transition: 'opacity 0.5s ease',
           lineHeight: 1,
+          zIndex: 10,
         }}
       >
         {item.id}
@@ -112,6 +134,7 @@ function AccordionItem({
             right: '24px',
             opacity: 1,
             transition: 'opacity 0.5s ease 0.15s',
+            zIndex: 10,
           }}
         >
           <h3
@@ -136,7 +159,7 @@ function AccordionItem({
                 fontSize: '10px',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                color: 'rgba(240,237,230,0.45)',
+                color: 'rgba(240,237,230,0.6)',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -149,7 +172,7 @@ function AccordionItem({
                 fontFamily: 'var(--font-dm-sans), sans-serif',
                 fontSize: '10px',
                 letterSpacing: '0.1em',
-                color: 'rgba(240,237,230,0.3)',
+                color: 'rgba(240,237,230,0.45)',
               }}
             >
               {item.year}
@@ -172,6 +195,7 @@ function AccordionItem({
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
             color: 'rgba(240,237,230,0.4)',
+            zIndex: 10,
           }}
         >
           {item.title}
@@ -215,6 +239,7 @@ function DescriptionPanel({ project }: { project: Project }) {
           color: project.color,
           marginBottom: '20px',
           display: 'block',
+          fontWeight: 500,
         }}
       >
         {project.id} — {project.category}
@@ -346,7 +371,7 @@ export default function Work() {
             Recent Projects
           </h2>
 
-          <a
+          <Link
             href="/work"
             style={{
               fontFamily: 'var(--font-dm-sans), sans-serif',
@@ -362,7 +387,7 @@ export default function Work() {
           >
             <span>View All</span>
             <span style={{ width: '28px', height: '1px', background: 'currentColor', display: 'block' }} />
-          </a>
+          </Link>
         </div>
       </div>
 
