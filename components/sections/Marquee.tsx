@@ -17,7 +17,8 @@ const ITEMS = [
   'Brand Identity',
   'Medical Website',
   'E-Commerce Website',
-  'Mobile App Design', 
+  'Mobile App Design',
+  'Barbershop Website', 
 ]
 
 const DIAMOND = (
